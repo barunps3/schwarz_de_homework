@@ -1,3 +1,4 @@
+from datetime import datetime
 from pyspark.sql import DataFrame
 from pyspark.sql import functions as F
 
@@ -27,19 +28,45 @@ def quarantine_negative_values(df: DataFrame, cols: list[str]) -> tuple[DataFram
 
 
 def quarantine_date_range(df: DataFrame,
-    start_date: str,
-    end_date: str, 
-    date_format: str,
-    cols: list[str]) -> tuple[DataFrame, DataFrame]:
+    start_datetime: datetime,
+    end_datetime: datetime,
+    col: str) -> tuple[DataFrame, DataFrame]:
     """
     Quarantine rows with dates outside the given range.
+    start_datetime: start time
+    end_datetime: end time, will be excluded
     Returns a tuple of two DataFrames: the first is the cleaned DataFrame,
     the second is the quarantine DataFrame."""
-    if not cols:
-        raise ValueError("cols must be a non-empty list of column names")
-    if not start_date or not end_date:
+    if not start_datetime or not end_datetime or not col:
         raise ValueError("start_date and end_date must be non-empty strings")
-    condition = (df[cols[0]] < start_date) | (df[cols[0]] > end_date)
-    for c in cols:
-        condition = condition | (df[c] < start_date) | (df[c] > end_date)
-    return df.filter(~condition), df.filter(condition)
+    condition = (df[col] >= F.lit(start_datetime)) & (df[col] < F.lit(end_datetime))
+    return df.filter(condition), df.filter(~condition)
+
+
+def timestamp_normalization(df: DataFrame, 
+    timestamp_col: str, 
+    timezone: str,
+    rename_timestamp_col: str = "", 
+    ) -> DataFrame:
+    """
+    Replace timestamp_col with UTC timestamp and Local timestamp. 
+    
+    timezone: timezone of the timestamp_col as known by the user
+    timestamp_col: the raw timestamp column
+    rename_timestamp_col: name used to derive utc and local timestamp cols
+
+    Returns a DataFrame with utc_timestamp column and local_timestamp column
+    """
+    if not timestamp_col or not timezone:
+        raise ValueError("timestamp_col and timezone must be non-empty strings")
+    if not rename_timestamp_col:
+        rename_timestamp_col = timestamp_col
+    
+    utc_timestamp_col_name = f"{rename_timestamp_col}_utc"
+    local_timestamp_col_name = f"{rename_timestamp_col}_local"
+    df = (df
+        .withColumn(utc_timestamp_col_name, F.to_utc_timestamp(timestamp_col, timezone))
+        .withColumn(local_timestamp_col_name, F.from_utc_timestamp(utc_timestamp_col_name, timezone))
+        .drop(timestamp_col)
+    )
+    return df

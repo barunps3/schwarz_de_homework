@@ -1,1 +1,1 @@
-DATE_FORMAT = "yyyy-MM-dd"
+ISO_DATE_FORMAT = "yyyy-MM-dd"

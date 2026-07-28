@@ -7,9 +7,9 @@ from pyspark.sql.types import (
 )
 
 NEW_YORK_WEATHER_SCHEMA = StructType([
-    StructField("year", StringType(), False),
-    StructField("month", StringType(), False),
-    StructField("day", StringType(), False),
+    StructField("year", IntegerType(), False),
+    StructField("month", IntegerType(), False),
+    StructField("day", IntegerType(), False),
 
     StructField("temp", DoubleType(), True),
     StructField("temp_source", StringType(), True),

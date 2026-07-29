@@ -14,3 +14,6 @@ select = [
 
 [tool.ruff.format]
 quote-style = "double"
+
+[tool.setuptools.packages.find]
+where = ["src"]

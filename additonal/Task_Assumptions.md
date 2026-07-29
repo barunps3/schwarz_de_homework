@@ -1,6 +1,5 @@
 ## Architecture Description
-
-To view the architecture diagram, open the excalidraw file in additional/taxi_architecture.excalidraw in the website https://excalidraw.com/. 
+To view the [architecture diagram](additional/taxi_architecture.excalidraw), open the excalidraw file: additional/taxi_architecture.excalidraw in the website https://excalidraw.com/. 
 The diagram is a high-level overview of the architecture and its components.
 
 Following Assumptions were made during the design of the architecture:
@@ -14,8 +13,10 @@ Following Assumptions were made during the design of the architecture:
 
 ## Data Analysis Task
 Following assumptions were made during the design of the data analysis:
+- Caching could not be enabled as severless databricks computer does not allow persistence.
 - Data is stored in Databricks Unity Catalog and accessible only to Databricks
 - Data was downloaded manually into the Unity Catalog for analysis and testing purposes
 - Pipeline to automatically fetch data was not expected
 - Notebook will be used only in databricks and cannot be run locally or in CI/CD.
 - Test cases however can be run locally or in CI/CD to test the functionality of the modules.
+- If notebook is not executing properly, you can find the [notebook output](additional/taxi_data_analytics.ipynb) in additional/taxi_data_analytics.ipynb. The notebook output is a static representation of the notebook execution and does not require any dependencies to run.

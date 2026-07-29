@@ -1,3 +1,12 @@
+[project]
+name = "taxi-pipeline"
+version = "0.1.0"
+description = "Taxi data processing pipeline"
+requires-python = ">=3.12"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.ruff]
 line-length = 100
 target-version = "py313"
@@ -14,6 +23,3 @@ select = [
 
 [tool.ruff.format]
 quote-style = "double"
-
-[tool.setuptools.packages.find]
-where = ["src"]

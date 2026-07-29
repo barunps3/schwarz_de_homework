@@ -1,8 +1,22 @@
+#python
+__pycache__
+
 # Any static data files
 *.csv
 *.gz
 *.parquet
 *.db
 
+#package-manager
 #pyenv
 .python-version
+#ruff
+.ruff_cache
+#pytest
+.pytest_cache
+
+# pyproject
+*.egg-info
+
+#editor
+.vscode

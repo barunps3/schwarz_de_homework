@@ -28,6 +28,7 @@ def test_timestamp_normalization_creates_utc_and_local_columns(spark):
     assert rows[1]["pickup_utc"] == datetime(2024, 1, 1, 17, 0)
     assert rows[1]["pickup_local"] == datetime(2024, 1, 1, 12, 0)
 
+
 def test_timestamp_normalization_raises_for_empty_inputs(spark):
     input_df = spark.createDataFrame(
         [],
@@ -40,6 +41,7 @@ def test_timestamp_normalization_raises_for_empty_inputs(spark):
     ):
         timestamp_normalization(input_df, "", "America/New_York")
 
+
 def test_quarantine_date_range_handles_boundaries_and_edge_values(spark):
     data = [
         (datetime(2023, 12, 31, 23, 59, 59),),
@@ -49,7 +51,7 @@ def test_quarantine_date_range_handles_boundaries_and_edge_values(spark):
     ]
     schema = StructType([StructField("event_time", TimestampType(), True)])
     input_df = spark.createDataFrame(data, schema)
-    input_df.show()
+
     cleaned_df, quarantined_df = quarantine_date_range(
         input_df,
         start_datetime=datetime(2024, 1, 1, 0, 0),

@@ -3,3 +3,6 @@
 *.gz
 *.parquet
 *.db
+
+#pyenv
+.python-version
